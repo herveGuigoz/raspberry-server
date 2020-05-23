@@ -1,0 +1,100 @@
+version: '3.4'
+
+services:
+  traefik:
+    image: traefik:v2.0
+    restart: always
+    container_name: traefik
+    ports:
+      - "80:80" # <== http
+      - "443:443" # <== https
+    command:
+      - --providers.docker.network=${PROJECT_NAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # On map la conf statique dans le conteneur
+      - ./traefik/traefik.toml:/etc/traefik/traefik.toml:ro
+      # On map la conf dynamique dans le conteneur
+      - ./traefik/dynamic-conf.toml:/etc/traefik/dynamic-conf.toml:ro
+      # On map les certificats dans le conteneur | use self-generated certificate only in dev, IT IS NOT SECURE!
+      #- dev-certs:/certs:ro
+    networks:
+      - web # <== Placing traefik on the network named web, to access containers on this network
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN_NAME}`)" # <== Setting the domain for the dashboard
+      - "traefik.http.routers.api.service=api@internal" # on veut faire appel au service api qui est mis à disposition par le provider internal 
+      - "traefik.http.routers.api.entrypoints=http" # Définir le endpoint (http)
+      #- "traefik.http.routers.api.middlewares=auth"
+      #- "traefik.http.middlewares.auth.basicauth.users=herveGuigoz:$$apr1$$fuBZRZVd$$r3oM30CUtfZnOI8qutwNy1"
+
+  firefly:
+    image: jc5x/firefly-iii:latest
+    container_name: firefly
+    restart: always
+    volumes:
+      - ./firefly/export:/var/www/firefly-iii/storage/export
+      - ./firefly/upload:/var/www/firefly-iii/storage/upload
+      #- firefly_export:/var/www/firefly-iii/storage/export
+      #- firefly_upload:/var/www/firefly-iii/storage/upload
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=fireflydb
+      - DB_PORT=5432
+      - DB_DATABASE=firefly
+      - DB_USERNAME=firefly
+      - DB_PASSWORD=secret_firefly_password
+      - APP_KEY=53523532226759353573433596537234
+      - TRUSTED_PROXIES=**
+    links: 
+      - fireflydb
+    depends_on: 
+      - fireflydb
+    networks:
+      - default
+      - web
+    expose:
+      - "80"
+    labels:
+      - "traefik.docker.network=web"
+      # Explicitly tell Traefik to expose this container
+      - traefik.enable=true
+      # URL HTTP
+      - traefik.http.routers.firefly-http-${PROJECT_NAME}.rule=Host(`firefly.${DOMAIN_NAME}`)
+      # URL HTTPS
+      - traefik.http.routers.firefly-https-${PROJECT_NAME}.rule=Host(`firefly.${DOMAIN_NAME}`)
+      # Point d'entré web (http)
+      - traefik.http.routers.firefly-http-${PROJECT_NAME}.entrypoints=web
+      # Point d'entré web-secure (https)
+      - traefik.http.routers.firefly-https-${PROJECT_NAME}.entrypoints=web-secure
+      # Activation de TLS pour https
+      - traefik.http.routers.firefly-https-${PROJECT_NAME}.tls=true
+      - traefik.http.routers.firefly-https-${PROJECT_NAME}.tls.certresolver=herveGuigoz
+      # HTTP to HTTPS Redirection
+      - traefik.http.routers.firefly-http-${PROJECT_NAME}.middlewares=redirect@file
+
+  fireflydb:
+    image: postgres:10-alpine
+    container_name: fireflydb
+    restart: always
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_USER=firefly
+      - POSTGRES_PASSWORD=secret_firefly_password
+    volumes:
+      - firefly_db:/var/lib/postgresql/data
+    networks: 
+      - default
+
+networks:
+  #the network where firefly can communicate to the database
+  default:
+    external: false
+  web:
+    external: true
+    
+volumes:
+  firefly_db:
+  firefly_export:
+  firefly_upload:
