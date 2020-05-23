@@ -90,5 +90,3 @@ networks:
 
 volumes:
   firefly_db:
-  firefly_export:
-  firefly_upload:
