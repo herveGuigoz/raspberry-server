@@ -1,8 +1,5 @@
 .SILENT:
 
-network:
-	docker network create web
-
 install: ## Install project
 	# Download the latest versions of the pre-built images.
 	docker-compose pull
