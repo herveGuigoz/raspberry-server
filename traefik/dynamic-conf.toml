@@ -1,5 +1,0 @@
-# Configuration dynamique
-
-[http.middlewares]
-  [http.middlewares.redirect.redirectScheme]
-    scheme = "https"
