@@ -24,3 +24,18 @@ reset: ## Reset all installation (use it with precaution!)
 	docker-compose down --volumes --remove-orphans
 	# Make a fresh install.
 	make install
+
+##
+## Traefik specific
+## -----
+##
+
+traefik-logs: ## Show logs
+	# Follow the logs.
+	docker logs -f traefik
+
+
+.DEFAULT_GOAL := help
+help:
+	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+.PHONY: help
