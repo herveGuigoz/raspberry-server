@@ -136,6 +136,26 @@ services:
     labels: 
       traefik.enable: false
 
+  im:
+    build:
+      context: ./im
+    volumes:
+      - './im:/app'
+      - '/app/node_modules'
+    expose:
+      - '8080'
+    labels:
+      traefik.enable: true
+      # http router
+      traefik.http.routers.im-http.rule: Host(`${DOMAIN_NAME}`)
+      traefik.http.routers.im-http.entrypoints: web
+      traefik.http.routers.im-http.middlewares: redirect
+      # https router
+      traefik.http.routers.im-https.rule: Host(`${DOMAIN_NAME}`)
+      traefik.http.routers.im-https.entrypoints: websecure
+      traefik.http.routers.im-https.tls: true
+      traefik.http.routers.im-https.tls.certresolver: leresolver
+
 volumes:
   # pihole volumes
   datapihole:
