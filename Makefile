@@ -1,5 +1,7 @@
 .SILENT:
 
+path=$(shell pwd)
+
 install: ## Install project
 	# Download the latest versions of the pre-built images.
 	docker-compose pull
@@ -45,5 +47,6 @@ help:
 ## -----
 ##
 
-backup: ## Show logs
-	docker exec -it fireflydb  pg_dump -Ufirefly --column-inserts --data-only firefly > db/firefly_backup.sql
+db-backup:
+	#docker exec -it fireflydb  pg_dump -Ufirefly --column-inserts --data-only firefly > $(path)/db/firefly_`date +%d%b%y`_backup.sql
+	docker exec -it fireflydb  pg_dump -Ufirefly --column-inserts --data-only firefly > $(path)/db/firefly_backup.sql
