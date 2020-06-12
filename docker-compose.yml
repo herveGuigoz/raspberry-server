@@ -41,12 +41,8 @@ services:
       traefik.http.middlewares.authtraefik.basicauth.users: ${AUTH_TRAEFIK}
       # Redirect middleware
       traefik.http.middlewares.redirect.redirectscheme.scheme: https
-
-      # global redirect to https
-      # traefik.http.routers.http-catchall.rule: hostregexp(`{host:.+}`)
-      # traefik.http.routers.http-catchall.entrypoints: web
-      # traefik.http.routers.http-catchall.middlewares: redirect-to-https
-      # traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
+      # Pihole middleware
+      traefik.http.middlewares.pihole.replacepath.path: /admin
 
   pihole:
     container_name: pihole
@@ -55,7 +51,7 @@ services:
     environment:
       TZ: 'Europe/Paris'
       VIRTUAL_HOST: pihole.localhost
-      WEBPASSWORD: ${PASSWORD} #'admin'
+      WEBPASSWORD: ${PIHOLE_PASSWORD} #'admin'
     volumes:
       - datapihole:/etc/pihole/
       - datadnsmasqd:/etc/dnsmasq.d/
@@ -76,6 +72,7 @@ services:
       traefik.http.routers.pihole-https.entrypoints: websecure
       traefik.http.routers.pihole-https.tls: true
       traefik.http.routers.pihole-https.tls.certresolver: leresolver
+      traefik.http.routers.pihole-https.middlewares: pihole
       # tcp router
       traefik.tcp.routers.pihole-dns.entrypoints: dns
       traefik.tcp.routers.pihole-dns.service: pihole
@@ -83,6 +80,7 @@ services:
       traefik.udp.routers.pihole-udp.entrypoints: udpdns
       traefik.udp.routers.pihole-udp.service: pihole
       traefik.udp.services.pihole.loadbalancer.server.port: 53
+
 
   firefly:
     image: jc5x/firefly-iii:latest
@@ -95,10 +93,10 @@ services:
       - DB_CONNECTION=pgsql
       - DB_HOST=fireflydb
       - DB_PORT=5432
-      - DB_DATABASE=firefly
-      - DB_USERNAME=firefly
+      - DB_DATABASE=${DATABASE_NAME}
+      - DB_USERNAME=${DATABASE_USER}
       - DB_PASSWORD=${DATABASE_PASS}
-      - APP_KEY=53523532226759353573433596537234
+      - APP_KEY=${APP_KEY}
       - TRUSTED_PROXIES=**
     links: 
       - fireflydb
@@ -127,8 +125,8 @@ services:
     expose:
       - "5432"
     environment:
-      - POSTGRES_USER=firefly
-      - POSTGRES_PASSWORD=${DATABASE_PASS}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - firefly_db:/var/lib/postgresql/data
     networks: 
@@ -136,25 +134,25 @@ services:
     labels: 
       traefik.enable: false
 
-  im:
-    build:
-      context: ./im
-    volumes:
-      - './im:/app'
-      - '/app/node_modules'
-    expose:
-      - '8080'
-    labels:
-      traefik.enable: true
-      # http router
-      traefik.http.routers.im-http.rule: Host(`${DOMAIN_NAME}`)
-      traefik.http.routers.im-http.entrypoints: web
-      traefik.http.routers.im-http.middlewares: redirect
-      # https router
-      traefik.http.routers.im-https.rule: Host(`${DOMAIN_NAME}`)
-      traefik.http.routers.im-https.entrypoints: websecure
-      traefik.http.routers.im-https.tls: true
-      traefik.http.routers.im-https.tls.certresolver: leresolver
+  #im:
+  #  build:
+  #    context: ./im
+  #  volumes:
+  #    - './im:/app'
+  #    - '/app/node_modules'
+  #  expose:
+  #    - '8080'
+  #  labels:
+  #    traefik.enable: true
+  #    # http router
+  #    traefik.http.routers.im-http.rule: Host(`${DOMAIN_NAME}`)
+  #    traefik.http.routers.im-http.entrypoints: web
+  #    traefik.http.routers.im-http.middlewares: redirect
+  #    # https router
+  #    traefik.http.routers.im-https.rule: Host(`${DOMAIN_NAME}`)
+  #    traefik.http.routers.im-https.entrypoints: websecure
+  #    traefik.http.routers.im-https.tls: true
+  #    traefik.http.routers.im-https.tls.certresolver: leresolver
 
 volumes:
   # pihole volumes
