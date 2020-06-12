@@ -1,13 +1,12 @@
 ## Traefik server for Raspberry Pi.
 
-### Features
+### Services
 
-| Project   | Doc
+|           | Doc
 |-----------|-----
 | Traefik   | [documentation](https://docs.traefik.io/getting-started/concepts/)
 | Firefly   | [documentation](https://docs.firefly-iii.org/)
 | PiHole    | [documentation](https://docs.pi-hole.net/)
-| Im        | N/A
 
 ### Installation
 
