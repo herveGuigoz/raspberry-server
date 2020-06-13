@@ -23,7 +23,7 @@ make install
 crontab -e
 ```
 
-- add this line:
+- add this line (replace $(path)):
 ```
 0 0 * * * docker exec -it fireflydb  pg_dump -Ufirefly --column-inserts --data-only firefly > $(path)/db/firefly_backup.sql
 ```
