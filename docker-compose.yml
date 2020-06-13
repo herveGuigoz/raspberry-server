@@ -29,7 +29,7 @@ services:
       - --api
       - --certificatesresolvers.leresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.leresolver.acme.email=herve.guigoz@gmail.com
-      - --certificatesresolvers.leresolver.acme.storage=/acme.json
+      - --certificatesresolvers.leresolver.acme.storage=/conf/acme.json
       - --certificatesresolvers.leresolver.acme.tlschallenge=true
     labels:
       # Dashboard
@@ -42,7 +42,7 @@ services:
       # Redirect middleware
       traefik.http.middlewares.redirect.redirectscheme.scheme: https
       # Pihole middleware
-      traefik.http.middlewares.pihole.replacepath.path: /admin
+      traefik.http.middlewares.pihole.addprefix.prefix: /admin
 
   pihole:
     container_name: pihole
@@ -72,7 +72,7 @@ services:
       traefik.http.routers.pihole-https.entrypoints: websecure
       traefik.http.routers.pihole-https.tls: true
       traefik.http.routers.pihole-https.tls.certresolver: leresolver
-      traefik.http.routers.pihole-https.middlewares: pihole
+      traefik.http.routers.pihole-https.middlewares: pihole@docker
       # tcp router
       traefik.tcp.routers.pihole-dns.entrypoints: dns
       traefik.tcp.routers.pihole-dns.service: pihole
@@ -95,7 +95,7 @@ services:
       - DB_PORT=5432
       - DB_DATABASE=${DATABASE_NAME}
       - DB_USERNAME=${DATABASE_USER}
-      - DB_PASSWORD=${DATABASE_PASS}
+      - DB_PASSWORD=${DATABASE_PASSWORD}
       - APP_KEY=${APP_KEY}
       - TRUSTED_PROXIES=**
     links: 
@@ -133,26 +133,6 @@ services:
       - default
     labels: 
       traefik.enable: false
-
-  #im:
-  #  build:
-  #    context: ./im
-  #  volumes:
-  #    - './im:/app'
-  #    - '/app/node_modules'
-  #  expose:
-  #    - '8080'
-  #  labels:
-  #    traefik.enable: true
-  #    # http router
-  #    traefik.http.routers.im-http.rule: Host(`${DOMAIN_NAME}`)
-  #    traefik.http.routers.im-http.entrypoints: web
-  #    traefik.http.routers.im-http.middlewares: redirect
-  #    # https router
-  #    traefik.http.routers.im-https.rule: Host(`${DOMAIN_NAME}`)
-  #    traefik.http.routers.im-https.entrypoints: websecure
-  #    traefik.http.routers.im-https.tls: true
-  #    traefik.http.routers.im-https.tls.certresolver: leresolver
 
 volumes:
   # pihole volumes
