@@ -2,11 +2,11 @@
 
 ### Services
 
-|           | Doc
-|-----------|-----
-| Traefik   | [documentation](https://docs.traefik.io/getting-started/concepts/)
-| Firefly   | [documentation](https://docs.firefly-iii.org/)
-| PiHole    | [documentation](https://docs.pi-hole.net/)
+|           | Doc                                                                 | Path
+|-----------|---------------------------------------------------------------------|-------------------
+| Traefik   | [documentation](https://docs.traefik.io/getting-started/concepts/)  | `traefik.{domain}/dashboard/#/`
+| Firefly   | [documentation](https://docs.firefly-iii.org/)                      | `firefly.{domain}`
+| PiHole    | [documentation](https://docs.pi-hole.net/)                          | `pihole.{domain}/admin`
 
 ### Installation
 
@@ -25,5 +25,17 @@ crontab -e
 
 - add this line:
 ```
-0 0 * * * make db-backup
+0 0 * * * docker exec -it fireflydb  pg_dump -Ufirefly --column-inserts --data-only firefly > $(path)/db/firefly_backup.sql
 ```
+
+### Setup Pihole
+
+#### Router / FAI
+
+- Your raspberry must have static ip adress.
+- Configure DNS Serveur of your router with the pi ip adress
+
+
+#### Edit setting in admin panel
+
+under `Settings`, `DNS`, `Interface listening behavior` select `Listen on all interfaces, permit all origins`.
