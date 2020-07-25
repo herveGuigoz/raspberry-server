@@ -28,6 +28,10 @@ crontab -e
 0 0 * * * docker exec -it fireflydb  pg_dump -Ufirefly --column-inserts --data-only firefly > $(path)/db/firefly_backup.sql
 ```
 
+### import sql backup
+
+`scp pi@${IP}:${PI_PATH}/firefly_backup.sql ${LOCAL_PATH}`
+
 ### Setup Pihole
 
 #### Router / FAI
