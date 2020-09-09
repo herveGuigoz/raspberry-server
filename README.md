@@ -2,11 +2,12 @@
 
 ### Services
 
-|           | Doc                                                                 | Path
-|-----------|---------------------------------------------------------------------|-------------------
-| Traefik   | [documentation](https://docs.traefik.io/getting-started/concepts/)  | `traefik.{domain}/dashboard/#/`
-| Firefly   | [documentation](https://docs.firefly-iii.org/)                      | `firefly.{domain}`
-| PiHole    | [documentation](https://docs.pi-hole.net/)                          | `pihole.{domain}/admin`
+|             | Doc                                                                 | Path
+|-------------|---------------------------------------------------------------------|-------------------
+| Traefik     | [documentation](https://docs.traefik.io/getting-started/concepts/)  | `traefik.{domain}/dashboard/#/`
+| Firefly     | [documentation](https://docs.firefly-iii.org/)                      | `firefly.{domain}`
+| PiHole      | [documentation](https://docs.pi-hole.net/)                          | `pihole.{domain}/admin`
+| File Server |                                                                     | `files.{domain}`
 
 ### Installation
 
