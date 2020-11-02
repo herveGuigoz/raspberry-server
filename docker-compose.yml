@@ -131,26 +131,26 @@ services:
     labels: 
       traefik.enable: false
 
-  file_server:
-    image: file_server
-    container_name: file_server
-    restart: always
-    build: ./file_server
-    networks:
-      - default
-    volumes: 
-      - ./file_server/src/uploads:/app/uploads
-    labels:
-      traefik.enable: true
-      # http router
-      traefik.http.routers.files-http.rule: Host(`files.${DOMAIN_NAME}`)
-      traefik.http.routers.files-http.entrypoints: web
-      traefik.http.routers.files-http.middlewares: redirect
-      # https router
-      traefik.http.routers.files-https.rule: Host(`files.${DOMAIN_NAME}`)
-      traefik.http.routers.files-https.entrypoints: websecure
-      traefik.http.routers.files-https.tls: true
-      traefik.http.routers.files-https.tls.certresolver: leresolver
+  # file_server:
+  #   image: file_server
+  #   container_name: file_server
+  #   restart: always
+  #   build: ./file_server
+  #   networks:
+  #     - default
+  #   volumes: 
+  #     - ./file_server/src/uploads:/app/uploads
+  #   labels:
+  #     traefik.enable: true
+  #     # http router
+  #     traefik.http.routers.files-http.rule: Host(`files.${DOMAIN_NAME}`)
+  #     traefik.http.routers.files-http.entrypoints: web
+  #     traefik.http.routers.files-http.middlewares: redirect
+  #     # https router
+  #     traefik.http.routers.files-https.rule: Host(`files.${DOMAIN_NAME}`)
+  #     traefik.http.routers.files-https.entrypoints: websecure
+  #     traefik.http.routers.files-https.tls: true
+  #     traefik.http.routers.files-https.tls.certresolver: leresolver
 
 volumes:
   # pihole volumes
