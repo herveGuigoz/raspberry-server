@@ -9,6 +9,12 @@ services:
     container_name: traefik
     image: traefik:chevrotin
     restart: unless-stopped
+    environment:
+      - "TZ=Europe/Paris"
+      - "OVH_ENDPOINT=ovh-eu"
+      - OVH_APPLICATION_KEY=${OVH_APPLICATION_KEY}
+      - OVH_APPLICATION_SECRET=${OVH_APPLICATION_SECRET}
+      - OVH_CONSUMER_KEY=${OVH_CONSUMER_KEY}
     ports:
       - 53:53/udp
       - 80:80
@@ -16,7 +22,8 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - "./conf/acme.json:/acme.json"
+      - ./conf/acme.json:/acme.json
+      - ./logs/traefik.log:/etc/traefik/applog.log
     command:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
@@ -24,15 +31,23 @@ services:
       - --entrypoints.udpdns.address=:53/udp
       - --providers.docker
       - --api
-      - --certificatesresolvers.leresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.leresolver.acme.email=herve.guigoz@gmail.com
-      - --certificatesresolvers.leresolver.acme.storage=/conf/acme.json
+      - --log.filePath=/etc/traefik/applog.log
+      - --log.level=ERROR
+      - --certificatesresolvers.leresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.leresolver.acme.email=${EMAIL}
+      - --certificatesresolvers.leresolver.acme.storage=/acme.json
       - --certificatesresolvers.leresolver.acme.tlschallenge=true
+      - --certificatesresolvers.leresolver.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.leresolver.acme.dnschallenge.provider=ovh
+      - --certificatesresolvers.leresolver.acme.dnschallenge.delaybeforecheck=0
     labels:
       # Dashboard
       traefik.http.routers.traefik.rule: Host(`traefik.${DOMAIN_NAME}`)
       traefik.http.routers.traefik.service: api@internal
+      traefik.http.routers.traefik.tls: true
       traefik.http.routers.traefik.tls.certresolver: leresolver
+      traefik.http.routers.traefik.tls.domains[0].main: ${DOMAIN_NAME}
+      traefik.http.routers.traefik.tls.domains[0].sans: "*.${DOMAIN_NAME}"
       traefik.http.routers.traefik.middlewares: authtraefik
       # Auth middleware
       traefik.http.middlewares.authtraefik.basicauth.users: ${AUTH_TRAEFIK}

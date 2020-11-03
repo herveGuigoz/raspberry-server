@@ -1,3 +1,5 @@
 *.sql
 db/*.sql
 /.env
+conf/acme.json
+logs/traefik.log
