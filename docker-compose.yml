@@ -33,8 +33,8 @@ services:
       - --api
       - --log.filePath=/etc/traefik/applog.log
       - --log.level=ERROR
-      - --certificatesresolvers.leresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.leresolver.acme.email=herve.guigoz@gmail.com
+      - --certificatesresolvers.leresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.leresolver.acme.email=${EMAIL}
       - --certificatesresolvers.leresolver.acme.storage=/acme.json
       - --certificatesresolvers.leresolver.acme.tlschallenge=true
       - --certificatesresolvers.leresolver.acme.httpchallenge.entrypoint=web
@@ -44,7 +44,10 @@ services:
       # Dashboard
       traefik.http.routers.traefik.rule: Host(`traefik.${DOMAIN_NAME}`)
       traefik.http.routers.traefik.service: api@internal
+      traefik.http.routers.traefik.tls: true
       traefik.http.routers.traefik.tls.certresolver: leresolver
+      traefik.http.routers.traefik.tls.domains[0].main: ${DOMAIN_NAME}
+      traefik.http.routers.traefik.tls.domains[0].sans: "*.${DOMAIN_NAME}"
       traefik.http.routers.traefik.middlewares: authtraefik
       # Auth middleware
       traefik.http.middlewares.authtraefik.basicauth.users: ${AUTH_TRAEFIK}
