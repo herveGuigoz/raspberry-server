@@ -1,1 +1,0 @@
-time="2020-11-03T12:50:34+01:00" level=error msg="Empty rule" container=pihole-raspberry-server-086e9d524f003386e19d1b4000738577abdfd91d7a587413ab1825920e7c2eb3 routerName=pihole-dns providerName=docker
