@@ -11,7 +11,13 @@
 
 ### Installation
 
-* Edit `.env` file, then run:
+* `touch .env`
+* `touch conf/acme.json`
+* `chmod 600 conf/acme.json`
+* `mkdir logs/`
+* `touch logs/traefik.log`
+
+Edit `.env` file, then run:
 
 ```
 make install
