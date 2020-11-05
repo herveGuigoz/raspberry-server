@@ -56,6 +56,23 @@ services:
       # Pihole middleware
       traefik.http.middlewares.pihole.addprefix.prefix: /admin
 
+  me:
+    container_name: me
+    build: ./me
+    networks:
+      - default
+    labels:
+      traefik.enable: true
+      # http router
+      traefik.http.routers.me-http.rule: Host(`${DOMAIN_NAME}`)
+      traefik.http.routers.me-http.entrypoints: web
+      traefik.http.routers.me-http.middlewares: redirect
+      # https router
+      traefik.http.routers.me-https.rule: Host(`${DOMAIN_NAME}`)
+      traefik.http.routers.me-https.entrypoints: websecure
+      traefik.http.routers.me-https.tls: true
+      traefik.http.routers.me-https.tls.certresolver: leresolver
+
   pihole:
     container_name: pihole
     restart: unless-stopped

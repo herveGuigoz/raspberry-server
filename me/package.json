@@ -1,0 +1,13 @@
+{
+  "name": "me",
+  "version": "0.0.1",
+  "description": "Portfolio",
+  "author": "Herve Guigoz <herve.guigoz@gmail.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
