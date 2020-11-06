@@ -27,21 +27,7 @@
 </template>
 
 <script>
-import Name from '~/components/Name.vue'
-import About from '~/components/About.vue'
-import Modal from '~/components/Modal'
-import Contact from '~/components/Contact'
-import MainContent from '~/components/MainContent.vue'
-
 export default {
-  name: 'app',
-  components: {
-    Contact,
-    Name,
-    About,
-    Modal,
-    MainContent
-  },
   data: function(){
     return {
       isOpen: false,

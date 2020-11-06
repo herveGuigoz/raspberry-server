@@ -110,18 +110,17 @@ export default {
   font-size: 21px;
 }
 .title {
-    font-family: 'Poppins-light', 'Helvetica', 'Arial', sans-serif;
-    font-style: normal;
-    font-weight: 200;
-    color: #000;
-    letter-spacing: -.05px;
-    text-transform: uppercase;
-    position: relative;
+  font-family: 'Poppins-light', 'Helvetica', 'Arial', sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  color: #000;
+  letter-spacing: -.05px;
+  text-transform: uppercase;
+  position: relative;
 }
 .text-xxs {
   font-size: 0.5rem;
 }
-
 .bordered {
   border-top: 1px solid #c4c3c3!important;
 }

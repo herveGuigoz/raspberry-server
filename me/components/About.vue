@@ -16,11 +16,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-$main-color: #4a5568;
-$secondary-color: #ffffff;
+<style scoped>
 button {
-  color: $secondary-color;
+  color: #ffffff;
   background: transparent;
   letter-spacing: .23px;
   text-align: right;
@@ -29,12 +27,12 @@ button {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-image: linear-gradient(
-        to right,
-        $main-color,
-        $main-color 50%,
-        $secondary-color 50%);
-        background-size: 200% 100%;
-        background-position: 101%;
+		to right,
+		#4a5568,
+		#4a5568 50%,
+		#ffffff 50%);
+		background-size: 200% 100%;
+		background-position: 101%;
 }
 button:hover {
   transition: all 0.3s cubic-bezier(0.000, 0.000, 0.230, 1);

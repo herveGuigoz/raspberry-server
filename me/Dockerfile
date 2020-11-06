@@ -16,8 +16,8 @@ RUN yarn install
 COPY . ./
 
 # for developpement
-CMD yarn dev
+# CMD yarn dev
 
 # for production
-# CMD yarn build
-# CMD yarn start
+RUN yarn build
+CMD yarn start
