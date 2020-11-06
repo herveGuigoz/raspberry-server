@@ -5,9 +5,13 @@
   "author": "Herve Guigoz <herve.guigoz@gmail.com>",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "start": "nuxt start"
   },
   "dependencies": {
-    "express": "^4.16.1"
+    "express": "^4.16.1",
+    "nuxt": "^2.14.7"
   }
 }

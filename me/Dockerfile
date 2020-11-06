@@ -1,20 +1,23 @@
-FROM node:12
+FROM node:15
+
+ENV HOST 0.0.0.0
 
 # Create app directory
-WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/me
+WORKDIR /usr/src/me
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json ./
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+COPY . ./
 
 # for developpement
-RUN npm install
+CMD yarn dev
+
 # for production
-#RUN npm ci --only=production
-
-# Bundle app source
-COPY . .
-
-EXPOSE 8080
-CMD [ "node", "server.js" ]
+# CMD yarn build
+# CMD yarn start

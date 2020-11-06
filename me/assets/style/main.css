@@ -1,0 +1,16 @@
+/* https://code-tribe.com/how-to-use-tailwind-css-with-nuxt/ */
+
+@font-face {
+    font-family: "Poppins";
+    src: url('../fonts/Poppins-Regular.otf') format("OpenType");
+   }
+  
+   @font-face {
+    font-family: "Poppins-light";
+    src: url('../fonts/Poppins-Light.otf') format("OpenType");
+   }
+
+   body {
+    background: #eee;
+    font-family: 'Poppins';
+  }
