@@ -9,6 +9,7 @@ export default {
     css: [
       '~/assets/style/main.css'
     ],
+    buildModules: ['@nuxtjs/tailwindcss'],
     render: {
       bundleRenderer: {
         shouldPreload: (file, type) => {
