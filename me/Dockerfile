@@ -1,4 +1,4 @@
-FROM node:15
+FROM node:15.1.0-buster
 
 ENV HOST 0.0.0.0
 
@@ -6,18 +6,17 @@ ENV HOST 0.0.0.0
 RUN mkdir -p /usr/src/me
 WORKDIR /usr/src/me
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# Prevent the reinstallation of node modules at every changes in the source code.
 COPY package.json yarn.lock ./
 
 RUN yarn install
 
 COPY . ./
 
+# for production
+RUN yarn build
+CMD [ "yarn", "start" ]
+
 # for developpement
 # CMD yarn dev
 
-# for production
-RUN yarn build
-CMD yarn start

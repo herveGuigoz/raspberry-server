@@ -2,7 +2,6 @@ node_modules
 npm-debug.log
 **/*.log
 **/*.md
-**/._*
 **/.dockerignore
 **/.DS_Store
 **/.git/
@@ -10,4 +9,3 @@ npm-debug.log
 **/.gitignore
 **/.gitmodules
 **/Dockerfile*
-build/
